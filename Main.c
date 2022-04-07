@@ -10,9 +10,9 @@
 int main()
 {
 	#include "parameters.h"
+	#include "modSources.h"
 
 	pthread_t thread1;
-	//void* void_parameters = (void*)parameters;//nää meneeki globaaleihin. tää oli vika argumentti alemmast funktingofidangf
 	int threadNotCreated = pthread_create(&thread1, NULL, hardwarePWMout, NULL);
 	if(threadNotCreated)
 	{
@@ -31,11 +31,13 @@ int main()
 		printf("Input parameter to change. ");//tää salee pois ja luupin ulkopuolelle vaa printataa lista kaiksest shidist ja sillee
 		scanf("%s", userInput);
 		
-		if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))//tää alempaan luuppiin?
+		if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))
 		{
 			EXIT_REQUESTED = 1;
 			break;
 		}
+
+		//if(/*avataankoModMatrix*/)
 		
 		for(int i=1; i<MAX_PARAMS; i++)
 		{
@@ -45,8 +47,11 @@ int main()
 				printf("Set %s (0-100) ", parameters[i].name);
 				scanf("%s", userInput);
 				dUserInput = 0.01*atoi(userInput);
-				if(parameters[i].updateValue==NULL) parameters[i].value = dUserInput;
-				else parameters[i].updateValue(dUserInput);
+
+				parameters[i].modArr[cmdLineIndex] = dUserInput; // cmdLineIndex = 0
+
+				//if(parameters[i].updateValue==NULL) parameters[i].value = dUserInput; // toi metodi menee pwmouttii. lasketaa vast sit ku on laskettu yhtee modulaatiotaulukon arvot
+				//else parameters[i].updateValue(dUserInput);
 			}
 			//else ja jotai koodii joka sallii parametrin arvon vaihtamisen suoraa tost
 		}

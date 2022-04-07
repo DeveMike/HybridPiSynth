@@ -10,8 +10,6 @@
 
 void* hardwarePWMout(void* void_parameters)
 {
-	//Parameter* parameters = (Parameter*)void_parameters;//<--- nää meni globaaleihin
-	
 	gpioCfgClock(1,1,0);// Increase speed
 	if(gpioInitialise()<0)
 	{
@@ -29,11 +27,25 @@ void* hardwarePWMout(void* void_parameters)
 	double adsrOutput = 0.0;
 	double output = 0.0;
 	unsigned int uiOutput;
-	
+
 	while(1)
 	{
-		if((int)parameters[0].value) break;
+		if(EXIT_REQUESTED) break;
+
+		// Calculate parameter values
+		for(int i=0; i<MAX_PARAMS; i++)
+		{
+			parameters[i].modSum = 0;
+			for(int j=0; j<MAX_PARAMS; j++)
+			{
+				parameters[i].modSum += parameters[i].modArr[j];
+			}
+			if(parameters[i].updateValue==NULL) parameters[i].value = parameters[i].modSum;
+			else parameters[i].updateValue(parameters[i].modSum);
+		}
 		
+		//---------------------------------------
+
 		filteredBtn = 0.1*!gpioRead(BUTTON) + 0.9*filteredBtn;// Debounce nimee uudellee!
 		gate = filteredBtn > 0.5; //Funktioon nämä? 
 		if(gate)
@@ -41,7 +53,6 @@ void* hardwarePWMout(void* void_parameters)
 			if(currentStage==R) currentStage = A;
 			if(currentStage==A)
 			{
-				//printf("Aa0 = %f, Ab1 = %f", parameters[0].value, parameters[0].secondaryValue);
 				adsrOutput = parameters[1].value*2 + parameters[1].secondaryValue*adsrOutput;	
 			}
 			if(adsrOutput>=1)
@@ -59,7 +70,6 @@ void* hardwarePWMout(void* void_parameters)
 			currentStage = R;
 			adsrOutput = parameters[4].secondaryValue*adsrOutput;
 		}
-		
 		
 		output = parameters[5].value*adsrOutput + parameters[6].value;
 		

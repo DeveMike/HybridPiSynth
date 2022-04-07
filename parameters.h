@@ -1,60 +1,75 @@
 #pragma once
 
 strcpy(parameters[0].key, "exit"); strcpy(parameters[0].secondaryKey, "quit");//funktiomakro siistimää?
-#define EXIT_REQUESTED parameters[0].value//tää makro Parameter.h tiedostoon
-EXIT_REQUESTED = 0;
+parameters[0].value = 0;
+
+int paramID = 1;
 
 // ATTACK
 
-#define ATTACK parameters[1]//vittu unohin et makrot toiseen tiedostoon! iha sama
-strcpy(ATTACK.name, "Attack");
-strcpy(ATTACK.key, "a"); strcpy(ATTACK.secondaryKey, "A");
-ATTACK.value = 1; ATTACK.secondaryValue = 0;
+strcpy(parameters[paramID].name, "Attack");
+strcpy(parameters[paramID].key, "a"); strcpy(parameters[paramID].secondaryKey, "A");
+parameters[paramID].value = 1; parameters[paramID].secondaryValue = 0;//alustettu arvo alempi?
+parameters[paramID].modArr[0] = 0.0;//<--- oikee alustettu?trew
 void attackMethod(double paramIn)
 {
-	parameters[1].value = pow(10, -8*paramIn);
-	parameters[1].secondaryValue = 1 - parameters[1].value;
+    parameters[paramID].value = pow(10, -8*paramIn);
+    parameters[paramID].secondaryValue = 1 - parameters[paramID].value;
 }
-ATTACK.updateValue = attackMethod;
+parameters[paramID].updateValue = attackMethod;
+
+paramID++;
 
 // DECAY
 
-strcpy(parameters[2].name, "Decay");
-strcpy(parameters[2].key, "d"); strcpy(parameters[2].secondaryKey, "D");
-parameters[2].value = 0.0001; parameters[2].secondaryValue = 0.9999;
+strcpy(parameters[paramID].name, "Decay");
+strcpy(parameters[paramID].key, "d"); strcpy(parameters[paramID].secondaryKey, "D");
+parameters[paramID].value = 0.0001; parameters[paramID].secondaryValue = 0.9999;
+parameters[paramID].modArr[0] = 0.5;
 void decayMethod(double paramIn)
 {
-	parameters[2].value = pow(10, -8*paramIn);
-	parameters[2].secondaryValue = 1 - parameters[2].value;
+    parameters[paramID].value = pow(10, -8*paramIn);
+    parameters[paramID].secondaryValue = 1 - parameters[paramID].value;
 }
-parameters[2].updateValue = decayMethod;
+parameters[paramID].updateValue = decayMethod;
+
+paramID++;
 
 // SUSTAIN
 
-strcpy(parameters[3].name, "Sustain");
-strcpy(parameters[3].key, "s"); strcpy(parameters[3].secondaryKey, "S");
-parameters[3].value = 0.5;
+strcpy(parameters[paramID].name, "Sustain");
+strcpy(parameters[paramID].key, "s"); strcpy(parameters[paramID].secondaryKey, "S");
+parameters[paramID].value = 0.5;
+parameters[paramID].modArr[0] = 0.5;
+
+paramID++;
 
 // RELASE
 
-strcpy(parameters[4].name, "Relase");
-strcpy(parameters[4].key, "r"); strcpy(parameters[4].secondaryKey, "R");
-parameters[4].value = 0.001; parameters[4].secondaryValue = 0.999;
+strcpy(parameters[paramID].name, "Relase");
+strcpy(parameters[paramID].key, "r"); strcpy(parameters[paramID].secondaryKey, "R");
+parameters[paramID].value = 0.001; parameters[paramID].secondaryValue = 0.999;
+parameters[paramID].modArr[0] = 0.5;
 void relaseMethod(double paramIn)
 {
-	parameters[4].value = pow(10, -8*paramIn);
-	parameters[4].secondaryValue = 1 - parameters[4].value;
+    parameters[paramID].value = pow(10, -8*paramIn);
+    parameters[paramID].secondaryValue = 1 - parameters[paramID].value;
 }
-parameters[4].updateValue = relaseMethod;
+parameters[paramID].updateValue = relaseMethod;
+
+paramID++;
 
 // EG LEVEL
 
-strcpy(parameters[5].name, "EG Level");
-strcpy(parameters[5].key, "l"); strcpy(parameters[5].secondaryKey, "L");
-parameters[5].value = 1;
+strcpy(parameters[paramID].name, "EG Level");
+strcpy(parameters[paramID].key, "l"); strcpy(parameters[paramID].secondaryKey, "L");
+parameters[paramID].value = 1;
+parameters[paramID].modArr[0] = 1;
+
+paramID++;
 
 // DC OFFSET
 
-strcpy(parameters[6].name, "DC Offset");
-strcpy(parameters[6].key, "dc"); strcpy(parameters[6].secondaryKey, "DC");
-parameters[6].value = 0;
+strcpy(parameters[paramID].name, "DC Offset");
+strcpy(parameters[paramID].key, "dc"); strcpy(parameters[paramID].secondaryKey, "DC");
+parameters[paramID].value = 0;
