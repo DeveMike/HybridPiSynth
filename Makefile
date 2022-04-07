@@ -18,10 +18,10 @@ DEPFILES=$(patsubst %.c,%.d,$(CFILES))
 #all: $(OBJECTS)
 
 output: $(OBJECTS)
-	gcc -pthread $(OBJECTS) -o Hybrid
+	gcc -pthread $(OBJECTS) -o Hybrid -lpigpio -lm
 
 %.o: %.c
-	gcc -Wall -c $^ -lpigpio -lm
+	gcc -Wall -c $^
 
 clean:
 	rm *.o Hybrid
