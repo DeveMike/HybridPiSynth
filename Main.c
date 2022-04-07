@@ -39,7 +39,7 @@ int main()
 
 		//if(/*avataankoModMatrix*/)
 		
-		for(int i=1; i<MAX_PARAMS; i++)
+		for(int i=0; i<MAX_PARAMS; i++)
 		{
 			int foundKey = !strcmp(userInput, parameters[i].key) || !strcmp(userInput, parameters[i].secondaryKey);
 			if(foundKey)
@@ -49,9 +49,6 @@ int main()
 				dUserInput = 0.01*atoi(userInput);
 
 				parameters[i].modArr[cmdLineIndex] = dUserInput; // cmdLineIndex = 0
-
-				//if(parameters[i].updateValue==NULL) parameters[i].value = dUserInput; // toi metodi menee pwmouttii. lasketaa vast sit ku on laskettu yhtee modulaatiotaulukon arvot
-				//else parameters[i].updateValue(dUserInput);
 			}
 			//else ja jotai koodii joka sallii parametrin arvon vaihtamisen suoraa tost
 		}

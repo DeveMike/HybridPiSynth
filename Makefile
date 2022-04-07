@@ -21,7 +21,7 @@ output: $(OBJECTS)
 	gcc -pthread $(OBJECTS) -o Hybrid -lpigpio -lm
 
 %.o: %.c
-	gcc -Wall -c $^
+	gcc -Wall -c $^ -I.
 
 clean:
 	rm *.o Hybrid

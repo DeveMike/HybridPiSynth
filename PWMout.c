@@ -41,12 +41,15 @@ void* hardwarePWMout(void* void_parameters)
 				parameters[i].modSum += parameters[i].modArr[j];
 			}
 			if(parameters[i].updateValue==NULL) parameters[i].value = parameters[i].modSum;
-			else parameters[i].updateValue(parameters[i].modSum);
+			else
+			{
+				parameters[i].updateValue(parameters[i].modSum);
+			}
 		}
 		
 		//---------------------------------------
 
-		filteredBtn = 0.1*!gpioRead(BUTTON) + 0.9*filteredBtn;// Debounce nimee uudellee!
+		filteredBtn = 0.05*!gpioRead(BUTTON) + 0.95*filteredBtn;// Debounce nimee uudellee!
 		gate = filteredBtn > 0.5; //Funktioon nämä? 
 		if(gate)
 		{

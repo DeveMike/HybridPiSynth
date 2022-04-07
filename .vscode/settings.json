@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "stdlib.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "hybridpisynth.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
