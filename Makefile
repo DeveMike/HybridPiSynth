@@ -1,11 +1,30 @@
-output: Main.o PWMout.o
-	gcc Main.o PWMout.o -o Hybrid
+#BINARY = bin
+CODEDIRS = . 
+#INCDIRS = . ./include/ # can be list
 
-Main.o: Main.c
-	gcc -Wall -c Main.c -l pigpio -lpthread -lm
+#CC = gcc
+#OPT = -O0
+# generate files that encode make rules for the .h dependencies
+#DEPFLAGS = -MP -MD
+# automatically add the -I onto each include directory
+#CFLAGS = -Wall -Wextra -g $(foreach D,$(INCDIRS),-I$(D)) $(OPT) $(DEPFLAGS)
 
-PWMout.o: PWMout.c
-	gcc -Wall -c PWMout.c -l pigpio -lpthread -lm
+# for-style iteration (foreach) and regular expression completions (wildcard)
+CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.c))
+# regular expression replacement
+OBJECTS=$(patsubst %.c,%.o,$(CFILES))
+DEPFILES=$(patsubst %.c,%.d,$(CFILES))
+
+#all: $(OBJECTS)
+
+output: $(OBJECTS)
+	gcc -pthread $(OBJECTS) -o Hybrid
+
+%.o: %.c
+	gcc -Wall -c $^ -lpigpio -lm
 
 clean:
 	rm *.o Hybrid
+
+# include the dependencies
+-include $(DEPFILES)
