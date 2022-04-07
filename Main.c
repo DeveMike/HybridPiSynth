@@ -12,6 +12,8 @@ int main()
 	#include "parameters.h"
 	#include "modSources.h"
 
+	EXIT_REQUESTED = 0;
+
 	pthread_t thread1;
 	int threadNotCreated = pthread_create(&thread1, NULL, hardwarePWMout, NULL);
 	if(threadNotCreated)
