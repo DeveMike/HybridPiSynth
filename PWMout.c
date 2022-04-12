@@ -1,11 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
-#include <string.h>
-#include <pthread.h>//tätä ei vissii tarvii?
 #include <pigpio.h>
-//mitkä kirastot oikeesti tarvii?fdfdsa
-#include "Parameter.h"
 #include "HybridPiSynth.h"
 
 void* hardwarePWMout()
@@ -14,64 +8,60 @@ void* hardwarePWMout()
 	gpioSetMode(BUTTON, PI_INPUT);
 	
 	int gate;
-	double filteredBtn = 0;
+	double debouncedBtn = 0;
 	enum ADSRstages{A, D, R};
 	enum ADSRstages currentStage = R;
-	//double adsrOutput = 0.0;//<-----------------
-	double output = 0.0;
-	unsigned int uiOutput;
+	unsigned int analOut;
 
 	while(1)
 	{
-		if(exitRequested) break;
+		if(g_exitRequested) break;
 
 		// Calculate parameter values
 		for(int i=0; i<MAX_PARAMS; i++)
 		{
-			parameters[i].modSum = 0;
+			modDests[i].modSum = 0;
 			for(int j=0; j<MAX_PARAMS; j++)
 			{
-				parameters[i].modSum += parameters[i].modArr[j].amount * (*parameters[i].modArr[j].out);
+				modDests[i].modSum += modDests[i].modArr[j].amount * (*modDests[i].modArr[j].out);
 			}
-			if(parameters[i].updateValue==NULL) parameters[i].value = parameters[i].modSum;
+			if(modDests[i].updateValue==NULL) modDests[i].value = modDests[i].modSum;
 			else
 			{
-				parameters[i].updateValue(parameters[i].modSum);
+				modDests[i].updateValue(modDests[i].modSum);
 			}
 		}
 		
 		//---------------------------------------
 
-		filteredBtn = 0.05*!gpioRead(BUTTON) + 0.95*filteredBtn;// Debounce nimee uudellee!
-		gate = filteredBtn > 0.5; //Funktioon nämä? 
+		debouncedBtn = 0.05*!gpioRead(BUTTON) + 0.95*debouncedBtn;
+		gate = debouncedBtn > 0.5;
 		if(gate)
 		{
 			if(currentStage==R) currentStage = A;
 			if(currentStage==A)
 			{
-				adsrOutput = parameters[1].value*2 + parameters[1].secondaryValue*adsrOutput;	
+				g_adsrOutput = ATTAKC_VALUE*2 + ATTACK_2NDARY_VALUE*g_adsrOutput;	
 			}
-			if(adsrOutput>=1)
+			if(g_adsrOutput>=1)
 			{
 				currentStage = D;
-				adsrOutput = log(adsrOutput) + 1;// Curb fast attack overshoot
+				g_adsrOutput = log(g_adsrOutput) + 1;// Curb fast attack overshoot
 			}
 			if(currentStage==D)
 			{
-				adsrOutput = parameters[2].value*parameters[3].value + parameters[2].secondaryValue*adsrOutput;
+				g_adsrOutput = DECAY_VALUE*SUSTAIN_VALUE + DECAY_2NDARY_VALUE*g_adsrOutput;
 			}
 		}
 		else
 		{
 			currentStage = R;
-			adsrOutput = parameters[4].secondaryValue*adsrOutput;
+			g_adsrOutput = RELASE_2NDARY_VALUE*g_adsrOutput;
 		}
 		
-		output = parameters[analOutIndex].value;
-		
-		output = output>1 ? 1 : output<0 ? 0 : output;
-		uiOutput = 1000000*output;
-		gpioHardwarePWM(18, 500000, uiOutput);
+		ANAL_OUT_VALUE = ANAL_OUT_VALUE>1 ? 1 : ANAL_OUT_VALUE<0 ? 0 : ANAL_OUT_VALUE;
+		analOut = 1000000*ANAL_OUT_VALUE;
+		gpioHardwarePWM(18, 500000, analOut);
 	}
 	
 	gpioTerminate();

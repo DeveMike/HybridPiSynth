@@ -4,15 +4,14 @@
 #include <string.h>
 #include <pthread.h>
 #include <pigpio.h>
-#include "Parameter.h"
 #include "HybridPiSynth.h"
 
 int main()
 {
-	// Initialize modulation sources and parameters
+	// Initialize modulation sources and modDests
 	#include "modSources.h"
 	#include "parameters.h"
-	exitRequested = 0;
+	g_exitRequested = 0;
 
 	/*************************************
 	 * INITIALIZE GPIO AND CREATE THREADS
@@ -54,27 +53,29 @@ int main()
 		
 		if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))
 		{
-			exitRequested = 1;
+			g_exitRequested = 1;
 			break;
 		}
 
-		if(!strcmp(userInput, "debug"))
+		if(!strcmp(userInput, "debug")) // DEBUG ------------------
 		{
-			printf("Anaali-indeksi: %i\n", analOutIndex);
-		}
+			printf("%s\n", modDests[0].modArr[dcIndex].name);
+			printf("%s\n", modDests[1].modArr[dcIndex].name);
+			printf("%s\n", modDests[2].modArr[dcIndex].name);
+		} // DEBUG ------------------------------------------------
 
 		//if(/*avataankoModMatrix*/)
 		
 		for(int i=0; i<MAX_PARAMS; i++)
 		{
-			int foundKey = !strcmp(userInput, parameters[i].key) || !strcmp(userInput, parameters[i].secondaryKey);
+			int foundKey = !strcmp(userInput, modDests[i].key) || !strcmp(userInput, modDests[i].secondaryKey);
 			if(foundKey)
 			{
-				printf("Set %s (0-100) ", parameters[i].name);
+				printf("Set %s (0-100) ", modDests[i].name);
 				scanf("%s", userInput);
 				dUserInput = 0.01*atoi(userInput);
 
-				parameters[i].modArr[dcIndex].amount = dUserInput; // dcIndex = 0
+				modDests[i].modArr[dcIndex].amount = dUserInput;
 			}
 			//else ja jotai koodii joka sallii parametrin arvon vaihtamisen suoraa tost
 		}

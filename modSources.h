@@ -1,36 +1,32 @@
 #pragma once
 
-// Get rid of null-pointers in parameters
+// Get rid of null-pointers in modDests
 double zero = 0;
 for(int i=0; i<MAX_PARAMS; i++)
-{
     for(int j=0; j<MAX_PARAMS; j++)
-    {
-        parameters[i].modArr[j].out = &zero;
-    }
-}
+        modDests[i].modArr[j].out = &zero;
 
+// Increment after every mod source declaration for indexing
 int modSrcID = 0;
+
+#define MOD_SRC_NAME(X)     for(int i=0;i<MAX_PARAMS;i++) strcpy(modDests[i].modArr[modSrcID].name, X)
+#define MOD_SRC_OUT_ADDR    for(int i=0;i<MAX_PARAMS;i++) modDests[i].modArr[modSrcID].out
+
+//----------------------------------------------
 
 // DC
 
-dcValue = 1;
-for(int i=0; i<MAX_PARAMS; i++)
-{
-    strcpy(parameters[i].modArr[modSrcID].name, "DC Offset");
-    parameters[i].modArr[modSrcID].out = &dcValue; // Initialize dc-value//<-------regfefaa
-}
+MOD_SRC_NAME("DC Offset");
+g_dcValue = 1;
+MOD_SRC_OUT_ADDR = &g_dcValue;
 int dcIndex = modSrcID;
 
 modSrcID++;
 
 // ADSR
 
-for(int i=0; i<MAX_PARAMS; i++)
-{
-    strcpy(parameters[i].modArr[modSrcID].name, "ADSR");
-    parameters[i].modArr[modSrcID].out = &adsrOutput;
-}
+MOD_SRC_NAME("ADSR");
+MOD_SRC_OUT_ADDR = &g_adsrOutput;
 int adsrIndex = modSrcID;
 
 modSrcID++;

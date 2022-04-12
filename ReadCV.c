@@ -1,11 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <pthread.h>//tätä ei vissii tarvii?
 #include <pigpio.h>
-//mitkä kirastot oikeesti tarvii?fdfdsa
-#include "Parameter.h"
 #include "HybridPiSynth.h"
 
 void* readCV()
@@ -29,7 +23,7 @@ void* readCV()
 	
 	while(1)
 	{
-		if(exitRequested) break;
+		if(g_exitRequested) break;
 		
 		//potPos = 0.000001*gpioRead(21) + 0.999999*potPos; //potPosin tilalle CV
 	}
