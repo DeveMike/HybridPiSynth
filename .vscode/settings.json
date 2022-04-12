@@ -3,6 +3,7 @@
         "stdlib.h": "c",
         "type_traits": "c",
         "hybridpisynth.h": "c"
+        "muistiinpanoi": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

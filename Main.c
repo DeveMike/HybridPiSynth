@@ -9,20 +9,39 @@
 
 int main()
 {
-	#include "parameters.h"
+	// Initialize modulation sources and parameters
 	#include "modSources.h"
+	#include "parameters.h"
+	exitRequested = 0;
 
-	EXIT_REQUESTED = 0;
+	/*************************************
+	 * INITIALIZE GPIO AND CREATE THREADS
+	 * ************************************/
 
-	pthread_t thread1;
+	gpioCfgClock(1,1,0);// Increase speed
+	if(gpioInitialise()<0)
+	{
+		printf("Could not initialize GPIO!");
+		exit(-1);
+	}
+
+	pthread_t thread1, thread2;
 	int threadNotCreated = pthread_create(&thread1, NULL, hardwarePWMout, NULL);
 	if(threadNotCreated)
 	{
 		printf("Error: unable to create thread, %d\n", threadNotCreated);
 		exit(-1);
 	}
-	
-	//---------------------------------------
+	threadNotCreated = pthread_create(&thread2, NULL, readCV, NULL);
+	if(threadNotCreated)
+	{
+		printf("Error: unable to create thread, %d\n", threadNotCreated);
+		exit(-1);
+	}
+
+	/***************************************
+	 * MAIN LOOP
+	 * **************************************/
 	
 	char userInput[100];
 	double dUserInput;
@@ -35,8 +54,13 @@ int main()
 		
 		if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))
 		{
-			EXIT_REQUESTED = 1;
+			exitRequested = 1;
 			break;
+		}
+
+		if(!strcmp(userInput, "debug"))
+		{
+			printf("Anaali-indeksi: %i\n", analOutIndex);
 		}
 
 		//if(/*avataankoModMatrix*/)
@@ -50,13 +74,14 @@ int main()
 				scanf("%s", userInput);
 				dUserInput = 0.01*atoi(userInput);
 
-				parameters[i].modArr[cmdLineIndex] = dUserInput; // cmdLineIndex = 0
+				parameters[i].modArr[dcIndex].amount = dUserInput; // dcIndex = 0
 			}
 			//else ja jotai koodii joka sallii parametrin arvon vaihtamisen suoraa tost
 		}
 	}
 	
-	pthread_join(thread1, NULL);
+	pthread_join(thread1, NULL);//luuppiin!
+	pthread_join(thread2, NULL);
 	return 0;
 }
 

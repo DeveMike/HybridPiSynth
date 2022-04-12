@@ -6,7 +6,7 @@ int paramID = 1;
 #define PARAM_NAME(X)       strcpy(parameters[paramID].name,X)
 #define PARAM_KEY(X)        strcpy(parameters[paramID].key,X)
 #define PARAM_2NDARY_KEY(X) strcpy(parameters[paramID].secondaryKey,X)
-#define PARAM_INIT_VALUE    parameters[paramID].modArr[0]
+#define PARAM_INIT_VALUE    parameters[paramID].modArr[0].amount        //aka initial dc -> param modulation amount
 #define PARAM_UPDATE_METHOD parameters[paramID].updateValue
 
 // ATTACK
@@ -65,17 +65,12 @@ PARAM_UPDATE_METHOD = relaseMethod;
 
 paramID++;
 
-// EG LEVEL
+// ANALOG OUTPUT
 
-PARAM_NAME("EG Level");
-PARAM_KEY("l");
-PARAM_2NDARY_KEY("L");
-PARAM_INIT_VALUE = 1;
+PARAM_NAME("Analog out");
+PARAM_KEY("out");
+PARAM_2NDARY_KEY("OUT");
+parameters[paramID].modArr[adsrIndex].amount = 1; // adsr -> analOut initial modulation amount
+analOutIndex = paramID;
 
 paramID++;
-
-// DC OFFSET
-
-PARAM_NAME(DC Offset);
-PARAM_KEY("dc");
-PARAM_2NDARY_KEY("DC");

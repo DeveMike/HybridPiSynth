@@ -8,15 +8,8 @@
 #include "Parameter.h"
 #include "HybridPiSynth.h"
 
-void* hardwarePWMout(void* void_parameters)
+void* hardwarePWMout()
 {
-	gpioCfgClock(1,1,0);// Increase speed
-	if(gpioInitialise()<0)
-	{
-		printf("Could not initialize GPIO!");
-		pthread_exit(NULL);
-	}
-	
 	const int BUTTON = 4;
 	gpioSetMode(BUTTON, PI_INPUT);
 	
@@ -24,13 +17,13 @@ void* hardwarePWMout(void* void_parameters)
 	double filteredBtn = 0;
 	enum ADSRstages{A, D, R};
 	enum ADSRstages currentStage = R;
-	double adsrOutput = 0.0;
+	//double adsrOutput = 0.0;//<-----------------
 	double output = 0.0;
 	unsigned int uiOutput;
 
 	while(1)
 	{
-		if(EXIT_REQUESTED) break;
+		if(exitRequested) break;
 
 		// Calculate parameter values
 		for(int i=0; i<MAX_PARAMS; i++)
@@ -38,7 +31,7 @@ void* hardwarePWMout(void* void_parameters)
 			parameters[i].modSum = 0;
 			for(int j=0; j<MAX_PARAMS; j++)
 			{
-				parameters[i].modSum += parameters[i].modArr[j];
+				parameters[i].modSum += parameters[i].modArr[j].amount * (*parameters[i].modArr[j].out);
 			}
 			if(parameters[i].updateValue==NULL) parameters[i].value = parameters[i].modSum;
 			else
@@ -74,7 +67,7 @@ void* hardwarePWMout(void* void_parameters)
 			adsrOutput = parameters[4].secondaryValue*adsrOutput;
 		}
 		
-		output = parameters[5].value*adsrOutput + parameters[6].value;
+		output = parameters[analOutIndex].value;
 		
 		output = output>1 ? 1 : output<0 ? 0 : output;
 		uiOutput = 1000000*output;

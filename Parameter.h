@@ -2,11 +2,19 @@
 
 #define MAX_PARAMS 16
 
+typedef struct ModSource
+{
+	char name[32];
+	char key[32];
+	double* out;
+	double amount;
+} ModSource;
+
 typedef struct Parameter //ModDest
 {
 	char name[32];
 	char key[32], secondaryKey[32];
-	double modArr[MAX_PARAMS];
+	ModSource modArr[MAX_PARAMS];
 	double modSum;
 	double value, secondaryValue;//nimee ehkä final valueks tai jotai
 	void(*updateValue)(double);
@@ -14,12 +22,13 @@ typedef struct Parameter //ModDest
 
 Parameter parameters[MAX_PARAMS];
 
-#define EXIT_REQUESTED parameters[0].value
+//-----------------------------------------------
 
-typedef struct ModSource
-{
-	char name[32];
-	double coeff;//tarviiko?
-} ModSource;
+int exitRequested;
 
-ModSource modSources[MAX_PARAMS];
+double dcValue;
+double adsrOutput;
+
+//------------------------------------------------
+
+int analOutIndex;
