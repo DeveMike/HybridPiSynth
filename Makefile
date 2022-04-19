@@ -1,30 +1,18 @@
-BINARY = bin
-CODEDIRS = . 
-INCDIRS = . ./include/ # can be list
-
 CC = gcc
-OPT = -O0
-# generate files that encode make rules for the .h dependencies
-DEPFLAGS = -MP -MD
-# automatically add the -I onto each include directory
-CFLAGS = -Wall -Wextra -g $(foreach D,$(INCDIRS),-I$(D)) $(OPT) $(DEPFLAGS)
-
-# for-style iteration (foreach) and regular expression completions (wildcard)
-CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.c))
-# regular expression replacement
-OBJECTS=$(patsubst %.c,%.o,$(CFILES))
-DEPFILES=$(patsubst %.c,%.d,$(CFILES))
-
-#all: $(OBJECTS)
+OUTPUT = Hybrid
+SOURCES = $(wildcard *.c)
+OBJECTS = $(SOURCES:.c=.o)
 
 output: $(OBJECTS)
-	gcc -pthread $(OBJECTS) -o Hybrid -lpigpio -lm
+	$(CC) $(OBJECTS) -pthread -lm -lpigpio -o $(OUTPUT)
 
-%.o: %.c
-	gcc -Wall -c $^ -I.
+$(OBJECTS): $(SOURCES)
+	$(CC) -Wall -c $?
+
+run:
+	make
+	@echo;echo;echo;echo
+	sudo ./$(OUTPUT)
 
 clean:
-	rm *.o Hybrid
-
-# include the dependencies
--include $(DEPFILES)
+	rm *.o $(OUTPUT)

@@ -1,79 +1,79 @@
 #pragma once
 
 // Increment after every parameter declaration for indexing
-int paramID = 0;
+int modDestID = 0;
 
-#define PARAM_NAME(X)       strcpy(modDests[paramID].name,X)
-#define PARAM_KEY(X)        strcpy(modDests[paramID].key,X)
-#define PARAM_2NDARY_KEY(X) strcpy(modDests[paramID].secondaryKey,X)
-#define PARAM_INIT_VALUE    modDests[paramID].modArr[dcIndex].amount
-#define PARAM_UPDATE_METHOD modDests[paramID].updateValue
+#define SET_MOD_DEST_NAME(X)       strcpy(modDests[modDestID].name,X)
+#define SET_MOD_DEST_KEY(X)        strcpy(modDests[modDestID].key,X)
+#define SET_MOD_DEST_2NDARY_KEY(X) strcpy(modDests[modDestID].secondaryKey,X)
+#define MOD_DEST_INIT_VALUE        modDests[modDestID].modSources[dcIndex].amount
+#define MOD_DEST_UPDATE_METHOD     modDests[modDestID].updateValue
 
 //----------------------------------------------------
 
 // ATTACK
 
-PARAM_NAME("Attack");
-PARAM_KEY("a");
-PARAM_2NDARY_KEY("A");
-attackIndex = paramID;
+SET_MOD_DEST_NAME("Attack");
+SET_MOD_DEST_KEY("a");
+SET_MOD_DEST_2NDARY_KEY("A");
+attackIndex = modDestID;
 void attackMethod(double paramIn)
 {
     modDests[attackIndex].value = pow(10, -8*paramIn);
     modDests[attackIndex].secondaryValue = 1 - modDests[attackIndex].value;
 }
-PARAM_UPDATE_METHOD = attackMethod;
+MOD_DEST_UPDATE_METHOD = attackMethod;
 
-paramID++;
+modDestID++;
 
 // DECAY
 
-PARAM_NAME("Decay");
-PARAM_KEY("d"); 
-PARAM_2NDARY_KEY("D");
-PARAM_INIT_VALUE = 0.5;
-decayIndex = paramID; 
+SET_MOD_DEST_NAME("Decay");
+SET_MOD_DEST_KEY("d");
+SET_MOD_DEST_2NDARY_KEY("D");
+MOD_DEST_INIT_VALUE = 0.5;
+decayIndex = modDestID;
 void decayMethod(double paramIn)
 {
     modDests[decayIndex].value = pow(10, -8*paramIn);
     modDests[decayIndex].secondaryValue = 1 - modDests[decayIndex].value;
 }
-PARAM_UPDATE_METHOD = decayMethod;
+MOD_DEST_UPDATE_METHOD = decayMethod;
 
-paramID++;
+modDestID++;
 
 // SUSTAIN
 
-PARAM_NAME("Sustain");
-PARAM_KEY("s");
-PARAM_2NDARY_KEY("S");
-PARAM_INIT_VALUE = 0.5;
-sustainIndex = paramID;
+SET_MOD_DEST_NAME("Sustain");
+SET_MOD_DEST_KEY("s");
+SET_MOD_DEST_2NDARY_KEY("S");
+MOD_DEST_INIT_VALUE = 0.5;
+sustainIndex = modDestID;
 
-paramID++;
+modDestID++;
 
-// RELASE
+// RELEASE
 
-PARAM_NAME("Relase");
-PARAM_KEY("r");
-PARAM_2NDARY_KEY("R");
-PARAM_INIT_VALUE = 0.5;
-relaseIndex = paramID;
-void relaseMethod(double paramIn)
+SET_MOD_DEST_NAME("Release");
+SET_MOD_DEST_KEY("r");
+SET_MOD_DEST_2NDARY_KEY("R");
+MOD_DEST_INIT_VALUE = 0.5;
+releaseIndex = modDestID;
+void releaseMethod(double paramIn)
 {
-    modDests[relaseIndex].value = pow(10, -8*paramIn);
-    modDests[relaseIndex].secondaryValue = 1 - modDests[relaseIndex].value;
+    modDests[releaseIndex].value = pow(10, -8*paramIn);
+    modDests[releaseIndex].secondaryValue = 1 - modDests[releaseIndex].value;
 }
-PARAM_UPDATE_METHOD = relaseMethod;
+MOD_DEST_UPDATE_METHOD = releaseMethod;
 
-paramID++;
+modDestID++;
 
 // ANALOG OUTPUT
 
-PARAM_NAME("Analog out");
-PARAM_KEY("out");
-PARAM_2NDARY_KEY("OUT");
-modDests[paramID].modArr[adsrIndex].amount = 1; // adsr -> analOut initial modulation amount
-analOutIndex = paramID;
+SET_MOD_DEST_NAME("Analog out");
+SET_MOD_DEST_KEY("out");
+SET_MOD_DEST_2NDARY_KEY("OUT");
+modDests[modDestID].modSources[adsrIndex].amount = 1; // adsr -> analOut initial modulation amount
+analOutIndex = modDestID;
 
-paramID++;
+modDestID++;

@@ -6,7 +6,7 @@ void* hardwarePWMout()
 {
 	const int BUTTON = 4;
 	gpioSetMode(BUTTON, PI_INPUT);
-	
+
 	int gate;
 	double debouncedBtn = 0;
 	enum ADSRstages{A, D, R};
@@ -23,7 +23,7 @@ void* hardwarePWMout()
 			modDests[i].modSum = 0;
 			for(int j=0; j<MAX_PARAMS; j++)
 			{
-				modDests[i].modSum += modDests[i].modArr[j].amount * (*modDests[i].modArr[j].out);
+				modDests[i].modSum += modDests[i].modSources[j].amount * (*modDests[i].modSources[j].out);
 			}
 			if(modDests[i].updateValue==NULL) modDests[i].value = modDests[i].modSum;
 			else
@@ -31,17 +31,17 @@ void* hardwarePWMout()
 				modDests[i].updateValue(modDests[i].modSum);
 			}
 		}
-		
+
 		//---------------------------------------
 
-		debouncedBtn = 0.05*!gpioRead(BUTTON) + 0.95*debouncedBtn;
+		debouncedBtn = 0.01*!gpioRead(BUTTON) + 0.99*debouncedBtn;
 		gate = debouncedBtn > 0.5;
 		if(gate)
 		{
 			if(currentStage==R) currentStage = A;
 			if(currentStage==A)
 			{
-				g_adsrOutput = ATTAKC_VALUE*2 + ATTACK_2NDARY_VALUE*g_adsrOutput;	
+				g_adsrOutput = ATTAKC_VALUE*2 + ATTACK_2NDARY_VALUE*g_adsrOutput;
 			}
 			if(g_adsrOutput>=1)
 			{
@@ -56,14 +56,13 @@ void* hardwarePWMout()
 		else
 		{
 			currentStage = R;
-			g_adsrOutput = RELASE_2NDARY_VALUE*g_adsrOutput;
+			g_adsrOutput = RELEASE_2NDARY_VALUE*g_adsrOutput;
 		}
-		
+
 		ANAL_OUT_VALUE = ANAL_OUT_VALUE>1 ? 1 : ANAL_OUT_VALUE<0 ? 0 : ANAL_OUT_VALUE;
 		analOut = 1000000*ANAL_OUT_VALUE;
 		gpioHardwarePWM(18, 500000, analOut);
 	}
-	
-	gpioTerminate();
+
 	return NULL;
 }

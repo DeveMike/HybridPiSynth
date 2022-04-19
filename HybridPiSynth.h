@@ -19,7 +19,7 @@ typedef struct ModDest
 {
 	char name[32];
 	char key[32], secondaryKey[32];
-	ModSource modArr[MAX_PARAMS];
+	ModSource modSources[MAX_PARAMS];
 	double modSum;
 	double value, secondaryValue;
 	void(*updateValue)(double);
@@ -47,8 +47,8 @@ int decayIndex;
 int sustainIndex;
 #define SUSTAIN_VALUE		modDests[sustainIndex].value
 
-int relaseIndex;
-#define RELASE_2NDARY_VALUE	modDests[relaseIndex].secondaryValue
+int releaseIndex;
+#define RELEASE_2NDARY_VALUE	modDests[releaseIndex].secondaryValue
 
 int analOutIndex;
 #define ANAL_OUT_VALUE		modDests[analOutIndex].value

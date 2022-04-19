@@ -41,48 +41,104 @@ int main()
 	/***************************************
 	 * MAIN LOOP
 	 * **************************************/
-	
+
+	printf("\nModulation sources\t\tKeys\t|\tModulation destinations\t\tKeys\n");
+	printf("\t\t\t\t\t|\n");
+	for(int i=0; i<fmax(modSrcID,modDestID); i++)
+	{
+		char modSrcName[32];
+		strcpy(modSrcName, modDests[0].modSources[i].name);
+
+		if(modSrcName == NULL || modDests[0].name == NULL)
+			break;
+
+		printf("%s\t\t\t",modSrcName);
+		if (strlen(modSrcName) < 8) printf("\t");
+		printf("%s\t", modDests[0].modSources[i].key);
+
+		printf("|\t%s\t\t", modDests[i].name);
+		if (strlen(modDests[i].name) < 8) printf("\t");
+		printf("\t%s\n", modDests[i].key);
+	}
+
 	char userInput[100];
 	double dUserInput;
-	
+	int foundKey, i, j;
+
+	printf("\n\nChoose source: ");
+
 	// Read user input
 	while(1)
 	{
-		printf("Input parameter to change. ");//tää salee pois ja luupin ulkopuolelle vaa printataa lista kaiksest shidist ja sillee
-		scanf("%s", userInput);
-		
 		if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))
 		{
 			g_exitRequested = 1;
-			break;
+			goto exiting;
 		}
 
-		if(!strcmp(userInput, "debug")) // DEBUG ------------------
+		for(i=0; i<MAX_PARAMS; i++)
 		{
-			printf("%s\n", modDests[0].modArr[dcIndex].name);
-			printf("%s\n", modDests[1].modArr[dcIndex].name);
-			printf("%s\n", modDests[2].modArr[dcIndex].name);
-		} // DEBUG ------------------------------------------------
-
-		//if(/*avataankoModMatrix*/)
-		
-		for(int i=0; i<MAX_PARAMS; i++)
+			foundKey = !strcmp(userInput, modDests[i].modSources[i].key);
+			if (foundKey) break;
+		}
+		if(foundKey)
 		{
-			int foundKey = !strcmp(userInput, modDests[i].key) || !strcmp(userInput, modDests[i].secondaryKey);
-			if(foundKey)
+			while(1)
 			{
-				printf("Set %s (0-100) ", modDests[i].name);
+				printf("Choose destination: ");
 				scanf("%s", userInput);
-				dUserInput = 0.01*atoi(userInput);
 
-				modDests[i].modArr[dcIndex].amount = dUserInput;
+				if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))
+				{
+					g_exitRequested = 1;
+					goto exiting;
+				}
+
+				for(j=0; j<MAX_PARAMS; j++)
+				{
+					foundKey = !strcmp(userInput, modDests[j].key) || !strcmp(userInput, modDests[j].secondaryKey);
+					if (foundKey) break;
+				}
+				if (foundKey) break;
 			}
-			//else ja jotai koodii joka sallii parametrin arvon vaihtamisen suoraa tost
+
+			while(1)
+			{
+				printf("Set %s to %s modulation (0-100) or choose source. ",modDests[i].modSources[i].name, modDests[j].name);
+				scanf("%s", userInput);
+
+				if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))
+				{
+					g_exitRequested = 1;
+					goto exiting;
+				}
+
+				for(int h=0; h<MAX_PARAMS; h++)
+				{
+					foundKey = !strcmp(userInput, modDests[h].modSources[h].key);
+					if (foundKey)
+					{
+						i = h;
+						break;
+					}
+				}
+				if (foundKey) break;
+
+				dUserInput = 0.01*atoi(userInput);
+				modDests[j].modSources[i].amount = dUserInput;
+			}
+		}
+		else
+		{
+			scanf("%s", userInput);
 		}
 	}
-	
-	pthread_join(thread1, NULL);//luuppiin!
+
+exiting:
+
+	pthread_join(thread1, NULL);
 	pthread_join(thread2, NULL);
+	gpioTerminate();
 	return 0;
 }
 
