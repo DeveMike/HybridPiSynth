@@ -1,10 +1,10 @@
 CC = gcc
-OUTPUT = Hybrid
+OUTPUT = Hybrid.out
 
 SOURCES = $(wildcard *.c)
 OBJECTS = $(SOURCES:.c=.o)
 
-CFLAGS = -Wall -Wextra -Wshadow -Wundef -Wno-unused-parameter -Wformat=2 -Wno-float-conversion
+CFLAGS = -Wall -Wextra -Wshadow -Wundef -Wformat=2 -Wno-float-conversion
 EXTRA_CFLAGS = -O2
 LFLAGS = -pthread -lm -lpigpio
 
@@ -15,7 +15,7 @@ $(OBJECTS): $(SOURCES)
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) -c $?
 
 debug:
-	EXTRA_CFLAGS="-g3" make
+	make EXTRA_CFLAGS="-g3"
 	sudo gdb ./$(OUTPUT)
 
 run:
