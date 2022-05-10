@@ -17,13 +17,17 @@ void initModDests()
 
     SET_MOD_DEST_NAME("Osc freq");
     SET_MOD_DEST_KEY("f");
+    MOD_DEST_INIT_VALUE = 1.0;
     oscFreqIndex = modDestCount;
-    void oscFreqMethod(double paramIn)
-    {
-        modDests[oscFreqIndex].value = pow(10, -8*paramIn);
-        modDests[oscFreqIndex].secondaryValue = 1 - modDests[oscFreqIndex].value;
-    }
-    MOD_DEST_UPDATE_METHOD = oscFreqMethod;
+
+    modDestCount++;
+
+    // OSCILLATOR FINE TUNING
+
+    SET_MOD_DEST_NAME("Osc fine freq");
+    SET_MOD_DEST_KEY("fine");
+    MOD_DEST_INIT_VALUE = 0.5;
+    oscFineIndex = modDestCount;
 
     modDestCount++;
 
@@ -39,6 +43,7 @@ void initModDests()
 
     SET_MOD_DEST_NAME("Osc pulse width");
     SET_MOD_DEST_KEY("pwm");
+    MOD_DEST_INIT_VALUE = 0.5;
     oscPWMindex = modDestCount;
 
     modDestCount++;

@@ -66,6 +66,10 @@ int oscFreqIndex;
 #define OSC_FREQ_VALUE			modDests[oscFreqIndex].value
 #define OSC_2NDARY_FREQ_VALUE	modDests[oscFreqIndex].secondaryValue
 
+int oscFineIndex;
+#define OSC_FINE_VALUE			modDests[oscFineIndex].value
+#define OSC_2NDARY_FINE_VALUE	modDests[oscFineIndex].secondaryValue
+
 int oscShapeIndex;
 #define OSC_SHAPE_VALUE			modDests[oscShapeIndex].value
 
