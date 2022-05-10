@@ -1,4 +1,3 @@
-CC = gcc
 OUTPUT = Hybrid.out
 
 SOURCES = $(wildcard *.c)
@@ -24,4 +23,4 @@ run:
 	@sudo ./$(OUTPUT)
 
 clean:
-	rm *.o $(OUTPUT)
+	rm *.o $(OUTPUT) $(SRCOBJS) $(TESTOBJS)

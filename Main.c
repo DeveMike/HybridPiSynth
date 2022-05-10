@@ -9,8 +9,8 @@
 int main()
 {
 	// Initialize modulation sources and modDests
-	#include "modSources.h"
-	#include "parameters.h"
+	initModSources();
+	initModDests();
 	g_exitRequested = 0;
 
 	/*************************************
@@ -24,53 +24,35 @@ int main()
 		exit(-1);
 	}
 
-	pthread_t thread1, thread2;
+	pthread_t thread1/*, thread2*/; // Toka threadi bugaa jos se ei tee mitää.
 	int threadNotCreated = pthread_create(&thread1, NULL, hardwarePWMout, NULL);
 	if(threadNotCreated)
 	{
 		printf("Error: unable to create thread, %d\n", threadNotCreated);
 		exit(-1);
 	}
-	threadNotCreated = pthread_create(&thread2, NULL, readCV, NULL);
+	/* threadNotCreated = pthread_create(&thread2, NULL, readCV, NULL);
 	if(threadNotCreated)
 	{
 		printf("Error: unable to create thread, %d\n", threadNotCreated);
 		exit(-1);
-	}
+	} */
 
 	/***************************************
 	 * MAIN LOOP
 	 * **************************************/
 
-	printf("\nModulation sources\t\tKeys\t|\tModulation destinations\t\tKeys\n");
-	printf("\t\t\t\t\t|\n");
-	for(int i=0; i<fmax(modSrcID,modDestID); i++)
-	{
-		char modSrcName[32];
-		strcpy(modSrcName, modDests[0].modSources[i].name);
-
-		if(modSrcName == NULL || modDests[0].name == NULL)
-			break;
-
-		printf("%s\t\t\t",modSrcName);
-		if (strlen(modSrcName) < 8) printf("\t");
-		printf("%s\t", modDests[0].modSources[i].key);
-
-		printf("|\t%s\t\t", modDests[i].name);
-		if (strlen(modDests[i].name) < 8) printf("\t");
-		printf("\t%s\n", modDests[i].key);
-	}
-
 	char userInput[100];
 	double dUserInput;
 	int foundKey, i, j;
 
+	printHelp();
 	printf("\n\nChoose source: ");
 
 	// Read user input
 	while(1)
 	{
-		if(!strcmp(userInput,"exit") || !strcmp(userInput,"quit"))
+		if(!strncmp(userInput,"exit", 4) || !strncmp(userInput,"quit",4))
 		{
 			g_exitRequested = 1;
 			goto exiting;
@@ -78,7 +60,7 @@ int main()
 
 		for(i=0; i<MAX_PARAMS; i++)
 		{
-			foundKey = !strcmp(userInput, modDests[i].modSources[i].key);
+			foundKey = !strcmp(userInput, modDests[i].modSources[i].key) && strlen(userInput)>0;
 			if (foundKey) break;
 		}
 		if(foundKey)
@@ -96,7 +78,7 @@ int main()
 
 				for(j=0; j<MAX_PARAMS; j++)
 				{
-					foundKey = !strcmp(userInput, modDests[j].key) || !strcmp(userInput, modDests[j].secondaryKey);
+					foundKey = !strcmp(userInput, modDests[j].key) && strlen(userInput)>0;
 					if (foundKey) break;
 				}
 				if (foundKey) break;
@@ -115,7 +97,7 @@ int main()
 
 				for(int h=0; h<MAX_PARAMS; h++)
 				{
-					foundKey = !strcmp(userInput, modDests[h].modSources[h].key);
+					foundKey = !strcmp(userInput, modDests[h].modSources[h].key) && strlen(userInput)>0;
 					if (foundKey)
 					{
 						i = h;
@@ -135,9 +117,8 @@ int main()
 	}
 
 exiting:
-
 	pthread_join(thread1, NULL);
-	pthread_join(thread2, NULL);
+	//pthread_join(thread2, NULL);
 	gpioTerminate();
 	return 0;
 }
