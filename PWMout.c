@@ -38,16 +38,18 @@ void* hardwarePWMout()
 		//		DSP
 		//---------------------------------------
 
-		// OSCILLATOR
+		// OSCILLATORS
+
 		freqCoeff_a = pow(2, -10*(OSC_FREQ_VALUE + 0.1*OSC_FINE_VALUE)); // ei oo oikee
 		freqCoeff_b = 1 - freqCoeff_a;
 		pureSaw = freqCoeff_a*(-1.5) + freqCoeff_b*pureSaw;
 		if(pureSaw <= 0)
 			pureSaw = 1;
-		g_sawOutput = pureSaw; // Implementoidaa koht loppuu.
-		g_pulseOutput = pureSaw >= OSC_PWM_VALUE ? 1 : 0;
+		g_saw1output = pureSaw; // Implementoidaa koht loppuu.
+		g_pulse1output = pureSaw >= OSC_PWM_VALUE ? 1 : 0;
 
 		// ADSR
+
 		debouncedBtn = 0.01*!gpioRead(BUTTON) + 0.99*debouncedBtn;
 		gate = debouncedBtn > 0.5;
 		if(gate)
@@ -74,10 +76,12 @@ void* hardwarePWMout()
 		}
 
 		// VCA
+
 		VCA_CV_VALUE = VCA_CV_VALUE >= 0 ? VCA_CV_VALUE : 0; // Half wave rectify
 		g_vcaOutput = VCA_IN_VALUE * VCA_CV_VALUE;
 
 		// HARDWARE OUTPUTS
+
 		OUT1_VALUE = OUT1_VALUE>1 ? 1 : OUT1_VALUE<0 ? 0 : OUT1_VALUE; // Clipping
 		hw_pwm1 = 1000000*OUT1_VALUE;
 		gpioHardwarePWM(18, 500000, hw_pwm1);

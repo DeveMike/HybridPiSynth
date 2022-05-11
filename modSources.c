@@ -29,21 +29,39 @@ void initModSources()
 
     modSrcCount++;
 
-    // OSCILLATOR SAW/TRI
+    // OSCILLATOR 1 SAW
 
-    SET_MOD_SRC_NAME("Saw/Tri");
-    SET_MOD_SRC_KEY("saw");
-    MOD_SRC_OUT_ADDR = &g_sawOutput;
-    sawIndex = modSrcCount;
+    SET_MOD_SRC_NAME("Sawtooth 1");
+    SET_MOD_SRC_KEY("saw1");
+    MOD_SRC_OUT_ADDR = &g_saw1output;
+    saw1index = modSrcCount;
 
     modSrcCount++;
 
-    // OSCILLATOR PULSE
+    // OSCILLATOR 1 PULSE
 
-    SET_MOD_SRC_NAME("Pulse");
-    SET_MOD_SRC_KEY("pulse");
-    MOD_SRC_OUT_ADDR = &g_pulseOutput;
-    pulseIndex = modSrcCount;
+    SET_MOD_SRC_NAME("Pulse 1");
+    SET_MOD_SRC_KEY("pulse1");
+    MOD_SRC_OUT_ADDR = &g_pulse1output;
+    pulse1index = modSrcCount;
+
+    modSrcCount++;
+
+    // OSCILLATOR 2 SAW
+
+    SET_MOD_SRC_NAME("Sawtooth 2");
+    SET_MOD_SRC_KEY("saw2");
+    MOD_SRC_OUT_ADDR = &g_saw2output;
+    saw2index = modSrcCount;
+
+    modSrcCount++;
+
+    // OSCILLATOR 2 PULSE
+
+    SET_MOD_SRC_NAME("Pulse 2");
+    SET_MOD_SRC_KEY("pulse2");
+    MOD_SRC_OUT_ADDR = &g_pulse2output;
+    pulse2index = modSrcCount;
 
     modSrcCount++;
 

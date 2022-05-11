@@ -104,7 +104,8 @@ void initModDests()
     // VCA AUDIO INPUT
 
     SET_MOD_DEST_NAME("VCA Input");
-    SET_MOD_DEST_KEY("vca");
+    SET_MOD_DEST_KEY("vcain");
+    modDests[modDestCount].modSources[saw1index].amount = 0.5; // saw -> vcain initial modulation amount
     vcaIndex = modDestCount;
 
     modDestCount++;
@@ -113,6 +114,7 @@ void initModDests()
 
     SET_MOD_DEST_NAME("VCA CV");
     SET_MOD_DEST_KEY("vcacv");
+    modDests[modDestCount].modSources[adsrIndex].amount = 1; // adsr -> vcacv initial modulation amount
     vcaCVindex = modDestCount;
 
     modDestCount++;
@@ -121,7 +123,7 @@ void initModDests()
 
     SET_MOD_DEST_NAME("Output 1");
     SET_MOD_DEST_KEY("out1");
-    //modDests[modDestCount].modSources[adsrIndex].amount = 1; // adsr -> out1 initial modulation amount
+    modDests[modDestCount].modSources[vcaOutIndex].amount = 1; // vca -> out1 initial modulation amount
     out1index = modDestCount;
 
     modDestCount++;

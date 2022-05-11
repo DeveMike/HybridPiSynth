@@ -49,15 +49,19 @@ int modSrcCount;
 
 int dcIndex;
 int adsrIndex;
-int sawIndex;
-int pulseIndex;
+int saw1index;
+int pulse1index;
+int saw2index;
+int pulse2index;
 int vcaOutIndex;
 
 //paskaaaa mutta menköön
 double g_dcValue;
 double g_adsrOutput;
-double g_sawOutput;
-double g_pulseOutput;
+double g_saw1output;
+double g_pulse1output;
+double g_saw2output;
+double g_pulse2output;
 double g_vcaOutput;
 
 //------------------------------------------------
