@@ -56,6 +56,15 @@ void initModSources()
 
     modSrcCount++;
 
+    // VCA OUTPUT
+
+    SET_MOD_SRC_NAME("VCA Output");
+    SET_MOD_SRC_KEY("vcaout");
+    MOD_SRC_OUT_ADDR = &g_vcaOutput;
+    vcaOutIndex = modSrcCount;
+
+    modSrcCount++;
+
     // CV (coming soon)
 }
 

@@ -17,7 +17,7 @@ void initModDests()
 
     SET_MOD_DEST_NAME("Osc freq");
     SET_MOD_DEST_KEY("f");
-    MOD_DEST_INIT_VALUE = 1.0;
+    MOD_DEST_INIT_VALUE = 0.9;
     oscFreqIndex = modDestCount;
 
     modDestCount++;
@@ -33,11 +33,11 @@ void initModDests()
 
     // OSCILLATOR SHAPE
 
-    SET_MOD_DEST_NAME("Osc shape");
+/*     SET_MOD_DEST_NAME("Osc shape");
     SET_MOD_DEST_KEY("shape");
     oscShapeIndex = modDestCount;
 
-    modDestCount++;
+    modDestCount++; */
 
     // OSCILLATOR PULSE WIDTH
 
@@ -101,12 +101,37 @@ void initModDests()
 
     modDestCount++;
 
-    // ANALOG OUTPUT
+    // VCA AUDIO INPUT
 
-    SET_MOD_DEST_NAME("Analog out");
-    SET_MOD_DEST_KEY("out");
-    modDests[modDestCount].modSources[adsrIndex].amount = 1; // adsr -> analOut initial modulation amount
-    analOutIndex = modDestCount;
+    SET_MOD_DEST_NAME("VCA Input");
+    SET_MOD_DEST_KEY("vca");
+    vcaIndex = modDestCount;
+
+    modDestCount++;
+
+    // VCA CV INPUT
+
+    SET_MOD_DEST_NAME("VCA CV");
+    SET_MOD_DEST_KEY("vcacv");
+    vcaCVindex = modDestCount;
+
+    modDestCount++;
+
+    // OUTPUT 1
+
+    SET_MOD_DEST_NAME("Output 1");
+    SET_MOD_DEST_KEY("out1");
+    //modDests[modDestCount].modSources[adsrIndex].amount = 1; // adsr -> out1 initial modulation amount
+    out1index = modDestCount;
+
+    modDestCount++;
+
+    // OUTPUT 2
+
+    SET_MOD_DEST_NAME("Output 2");
+    SET_MOD_DEST_KEY("out2");
+    modDests[modDestCount].modSources[adsrIndex].amount = 1; // adsr -> out2 initial modulation amount
+    out2index = modDestCount;
 
     modDestCount++;
 }

@@ -16,7 +16,7 @@ void* hardwarePWMout()
 	enum ADSRstages{A, D, R};
 	enum ADSRstages currentStage = R;
 
-	unsigned int analOut;
+	unsigned int hw_pwm1, hw_pwm2;
 
 	while(1)
 	{
@@ -74,10 +74,17 @@ void* hardwarePWMout()
 		}
 
 		// VCA
-		ANAL_OUT_VALUE = ANAL_OUT_VALUE>1 ? 1 : ANAL_OUT_VALUE<0 ? 0 : ANAL_OUT_VALUE; // Clipping
-		//ANAL_OUT_VALUE = 0.9*ANAL_OUT_VALUE + 0.1*ANAL_OUT_VALUE; // Antialiasing
-		analOut = 1000000*ANAL_OUT_VALUE;
-		gpioHardwarePWM(18, 500000, analOut);
+		VCA_CV_VALUE = VCA_CV_VALUE >= 0 ? VCA_CV_VALUE : 0; // Half wave rectify
+		g_vcaOutput = VCA_IN_VALUE * VCA_CV_VALUE;
+
+		// HARDWARE OUTPUTS
+		OUT1_VALUE = OUT1_VALUE>1 ? 1 : OUT1_VALUE<0 ? 0 : OUT1_VALUE; // Clipping
+		hw_pwm1 = 1000000*OUT1_VALUE;
+		gpioHardwarePWM(18, 500000, hw_pwm1);
+
+		OUT2_VALUE = OUT2_VALUE>1 ? 1 : OUT2_VALUE<0 ? 0 : OUT2_VALUE; // Clipping
+		hw_pwm2 = 1000000*OUT2_VALUE;
+		gpioHardwarePWM(19, 500000, hw_pwm2);
 	}
 
 	return NULL;
