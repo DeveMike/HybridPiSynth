@@ -68,17 +68,29 @@ double g_vcaOutput;
 
 int modDestCount;
 
-int oscFreqIndex;
-#define OSC_FREQ_VALUE			modDests[oscFreqIndex].value
+int osc1freqIndex;
+#define OSC1_FREQ_VALUE			modDests[osc1freqIndex].value
 
-int oscFineIndex;
-#define OSC_FINE_VALUE			modDests[oscFineIndex].value
+int osc1fineIndex;
+#define OSC1_FINE_VALUE			modDests[osc1fineIndex].value
 
-int oscShapeIndex;
-#define OSC_SHAPE_VALUE			modDests[oscShapeIndex].value
+/* int osc1shapeIndex;
+#define OSC1_SHAPE_VALUE		modDests[osc1shapeIndex].value */
 
-int oscPWMindex;
-#define OSC_PWM_VALUE			modDests[oscPWMindex].value
+int osc1PWMindex;
+#define OSC1_PWM_VALUE			modDests[osc1PWMindex].value
+
+int osc2freqIndex;
+#define OSC2_FREQ_VALUE			modDests[osc2freqIndex].value
+
+int osc2fineIndex;
+#define OSC2_FINE_VALUE			modDests[osc2fineIndex].value
+
+/* int osc2shapeIndex;
+#define OSC2_SHAPE_VALUE		modDests[osc2shapeIndex].value */
+
+int osc2PWMindex;
+#define OSC2_PWM_VALUE			modDests[osc2PWMindex].value
 
 int attackIndex;
 #define ATTAKC_VALUE			modDests[attackIndex].value

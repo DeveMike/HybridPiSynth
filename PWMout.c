@@ -8,8 +8,10 @@ void* hardwarePWMout()
 {
 	gpioSetMode(BUTTON, PI_INPUT);
 
-	double pureSaw = 1;
-	double freqCoeff_a = 0, freqCoeff_b = 0;
+	double pureSaw1 = 1;
+	double freq1coeff_a = 0, freq1coeff_b = 0;
+	double pureSaw2 = 1;
+	double freq2coeff_a = 0, freq2coeff_b = 0;
 
 	int gate;
 	double debouncedBtn = 0;
@@ -40,13 +42,21 @@ void* hardwarePWMout()
 
 		// OSCILLATORS
 
-		freqCoeff_a = pow(2, -10*(OSC_FREQ_VALUE + 0.1*OSC_FINE_VALUE)); // ei oo oikee
-		freqCoeff_b = 1 - freqCoeff_a;
-		pureSaw = freqCoeff_a*(-1.5) + freqCoeff_b*pureSaw;
-		if(pureSaw <= 0)
-			pureSaw = 1;
-		g_saw1output = pureSaw; // Implementoidaa koht loppuu.
-		g_pulse1output = pureSaw >= OSC_PWM_VALUE ? 1 : 0;
+		freq1coeff_a = pow(2, -10*(OSC1_FREQ_VALUE + 0.1*OSC1_FINE_VALUE)); // ei oo oikee
+		freq1coeff_b = 1 - freq1coeff_a;
+		pureSaw1 = freq1coeff_a*(-1.5) + freq1coeff_b*pureSaw1;
+		if(pureSaw1 <= 0)
+			pureSaw1 = 1;
+		g_saw1output = pureSaw1; // Implementoidaa koht loppuu.
+		g_pulse1output = pureSaw1 >= OSC1_PWM_VALUE ? 1 : 0;
+
+		freq2coeff_a = pow(2, -10*(OSC2_FREQ_VALUE + 0.1*OSC2_FINE_VALUE)); // ei oo oikee
+		freq2coeff_b = 1 - freq2coeff_a;
+		pureSaw2 = freq2coeff_a*(-1.5) + freq2coeff_b*pureSaw2;
+		if(pureSaw2 <= 0)
+			pureSaw2 = 1;
+		g_saw2output = pureSaw2; // Implementoidaa koht loppuu.
+		g_pulse2output = pureSaw2 >= OSC2_PWM_VALUE ? 1 : 0;
 
 		// ADSR
 

@@ -1,0 +1,100 @@
+/*
+ * Dokumentointi headereihi!
+ *
+ * Käyttäjälle mahollisuus valita lineaarisen ja exponentiaalisen lähön välil(?)
+ *
+ * Klippausindikaattori:
+ * Lasketaa sisääntulon jännite jännitejakajal jollekki tasolle, jolla pystytää pelailla.
+ * Kokoaaltotasasuuntaus johonki.
+ * Sit vaa komparaattorin kaut GPIO sisää.
+ * Tullu signaali koodil sillee et pidetää toiseen GPIO kytkettyy ledii pääl jonku aikaa.
+ *
+ * Oskillaattori:
+ * Sahalaitakore. Kolmio saadaa lätkimäl sahalaita FBR:ään.
+ * Shape-nutikka määrittää, et kui iso osa aallost käännetää.
+ * Kantti/pulssi saadaa vaa lätkimäl komparaattorii.
+ * Brownist liikehintää vireytee.
+ * Molemmat aallonmuodot lähdöiks?
+ * Shape ja PWM nutikat eriksee
+ *
+ * Tai ei ehkä oskilaattorin kaikille lähöille omaa lähtöö.
+ * Sen sijaa ois kolme parametrii: Pitch, type ja shape.
+ * Type valitsis vaik kuuden eri oskillaattorityypin välilt.
+ * Typeki ois jatkuva nuppi joka miksaa eri tyyppien välilt.
+ * Esimerkiks arvo 0 ois saw/tri, arvo 20 ois pulse ja 10 ois niist 50/50 mixi.
+ * Tyypit ois vaik saw, pulse, tri fold, sync, jokuemtvieletmikäoiskotrifold2? ja all eli joka tyyppin mixi.
+ * Shape sit tekis jotai jokaselle aallolle.
+ * Sawille se määrittäis DC enne FBR.
+ * Pulselle pulssinleveyde.
+ * Tri foldille gaini enne foldii.
+ * Syncille synkattavan sahalaidan pitchi.
+ *
+ * 2x VCA (alkuu 1), joist voidaa moduloida audiosisääntuloo ja cv sisääntuloo.
+ * Vai oisko ring mod? Suurin osa signaaleistha on kuitenki pelkkää positiivist.
+ * Tai ehkä 2x vca ja 1x ring mod. Se on käyttäjällekki helpompi ymmärtää.
+ * VCA:t vois olla hieman epälineaarisii. Sillo takasinkytkentä käyttäytyis ja vois kuulostaa paremmalt.
+ *
+ * Joskus voi refaktoroida pois noi secondaryvaluet. Ne on iha sama laskee vaa dsp-luupis.
+ * Ne piti muutenki laskee eriksee oskillaattoris, jotta saa helposti fine tuningkii.
+ *
+ * Refaktoroi moddest.c noi järkyttävät alustukset makroon!
+ *
+ * Oskillaattorien arvot välii -1 - 1. Lähdön kans. Paljo intuitiivisempi sillee.
+ * */
+
+// Modulaatiolähteet alkuu ois seuraavat:
+// DC, ADSR, OSC, CV
+
+// Myöhemmi vois olla vaik nää:
+// DC, ADSR, OSC1, OSC2, CV1, CV2, CV3, CV4, CV5, CV6, CV7, CV8, MIDI_NOTE, MIDI_WHEEL
+
+// Kohteina ois joka ikine parametri eli alkuun
+// A, D, S, R, Osc_freq, Osc_shape, Osc_level, VCA_in, VCA_CV
+
+// Eli myöhemmin vaik
+// A, D, S, R, ADSR_L, OSC1F, OSC1S, OSC1A, OSC2F, OSC2S, OSC2A, VCA1_IN, VCA1_CV, VCA2_CV
+
+/*
+ * Potikoille oma oskillaattori, jonka jälkee readCV oskillaattori pois
+ *
+ * Sit ku on saatu mod matriisi toimii komentolinjalt nii uutta git branchii.
+ * Se ois feature bräntsi.
+ * Tähä mennes oon pistäny committii vast sit ku oon saanu jonku isomma homman valmiiks.
+ * Jatkos committii vaa koko aja featurebräntsii. Heti ku joku pieniki juttu skulaa.
+ *
+ * Mahollisesti pitää kuitenki alustaa kaikki modulaatio sillee et alustus matriisii.
+ * Alustus ois kokonaislukui, jotka voi näyttää sit käyttäjälle kohas chiiba diivba.
+ *
+ * Refaktoroi varsinki main()!!!
+ * foundKey funktioon
+ * exit funktioon
+ * Noi vitun secondaryt helvettiin!
+ * toi parametrien printtaus omaan funktioon printattavaks millo vaa
+ *
+ * Miks on noi g_dcValue ja g_adsrOutput?
+ * Ne oli salee siks vaa et voin osottaa samaan muuttujaan.
+ * Mut sit käytin kuitenki vaa suoraa sitä muuttujaa dsp-luupis??? xddd
+ * Ainii mut se pointti oli se et voin laskee vaa sit matriisist sen summan.
+ * Paska tyyli silti. Noihan on vittu indeksoitu.
+ * Otan salee pois outin tuolt modSource-structist.
+ * Lisään vaa globaalin talukon mis on kaikki modulaatiolähteiden ulostulot.
+ * Noi globaalit sit voi ottaa pois.
+ * Taulukon arvoi saadaa käytettyy tol indeksoinnil. Iha samal taval ku modDesteil.
+ *
+ * MODSOURCEI LÖYTYY
+ * mainist luupist
+ * cmdlineinterfacest
+ * modsourcest makrot ja for-luuppi
+ * moddest init value makro ja alustus tuol lopus
+ * pwmoutis modusm laskenta
+ *
+ * Saan salee refaktoroituu modDestist modSources taulukon vaa doubletaulukoks.
+ *
+ * Kääntäjän optimointi ei oikee pelaa hyvin threadien ja/tai globaalien kaa.
+ *
+ * Heederin noi globaalit muuttujat vois järjestellä paremmi.
+ * Ne vois laitttaa structiin ja omaan instanssiin kaikki.
+ *
+ * Ota selvää jos threadit sais kokonaa delautettuu
+ * Häh mitä vittuu toi "delautettu" tarkottaa?? xddd
+ * */

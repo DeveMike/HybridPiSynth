@@ -13,38 +13,73 @@ void initModDests()
 
     //----------------------------------------------------
 
-    // OSCILLATOR FREQUENCY
+    // OSCILLATOR 1 FREQUENCY
 
     SET_MOD_DEST_NAME("Osc freq");
-    SET_MOD_DEST_KEY("f");
+    SET_MOD_DEST_KEY("f1");
     MOD_DEST_INIT_VALUE = 0.9;
-    oscFreqIndex = modDestCount;
+    osc1freqIndex = modDestCount;
 
     modDestCount++;
 
-    // OSCILLATOR FINE TUNING
+    // OSCILLATOR 1 FINE TUNING
 
-    SET_MOD_DEST_NAME("Osc fine freq");
-    SET_MOD_DEST_KEY("fine");
+    SET_MOD_DEST_NAME("Osc 1 fine freq");
+    SET_MOD_DEST_KEY("fine1");
     MOD_DEST_INIT_VALUE = 0.5;
-    oscFineIndex = modDestCount;
+    osc1fineIndex = modDestCount;
 
     modDestCount++;
 
-    // OSCILLATOR SHAPE
+    // OSCILLATOR 1 SHAPE
 
-/*     SET_MOD_DEST_NAME("Osc shape");
-    SET_MOD_DEST_KEY("shape");
+/*     SET_MOD_DEST_NAME("Osc 1 shape");
+    SET_MOD_DEST_KEY("shape1");
     oscShapeIndex = modDestCount;
 
     modDestCount++; */
 
-    // OSCILLATOR PULSE WIDTH
+    // OSCILLATOR 1 PULSE WIDTH
 
-    SET_MOD_DEST_NAME("Osc pulse width");
-    SET_MOD_DEST_KEY("pwm");
+    SET_MOD_DEST_NAME("Osc 1 PWM");
+    SET_MOD_DEST_KEY("pwm1");
     MOD_DEST_INIT_VALUE = 0.5;
-    oscPWMindex = modDestCount;
+    osc1PWMindex = modDestCount;
+
+    modDestCount++;
+
+    // OSCILLATOR 2 FREQUENCY
+
+    SET_MOD_DEST_NAME("Osc 2 freq");
+    SET_MOD_DEST_KEY("f2");
+    MOD_DEST_INIT_VALUE = 0.9;
+    osc2freqIndex = modDestCount;
+
+    modDestCount++;
+
+    // OSCILLATOR 2 FINE TUNING
+
+    SET_MOD_DEST_NAME("Osc 2 fine freq");
+    SET_MOD_DEST_KEY("fine2");
+    MOD_DEST_INIT_VALUE = 0.51; // Sligth detuning
+    osc2fineIndex = modDestCount;
+
+    modDestCount++;
+
+    // OSCILLATOR 2 SHAPE
+
+/*     SET_MOD_DEST_NAME("Osc 2 shape");
+    SET_MOD_DEST_KEY("shape2");
+    osc2shapeIndex = modDestCount;
+
+    modDestCount++; */
+
+    // OSCILLATOR 2 PULSE WIDTH
+
+    SET_MOD_DEST_NAME("Osc 2 PWM");
+    SET_MOD_DEST_KEY("pwm2");
+    MOD_DEST_INIT_VALUE = 0.5;
+    osc2PWMindex = modDestCount;
 
     modDestCount++;
 
